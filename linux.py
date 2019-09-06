@@ -41,24 +41,24 @@ def run():
             tab = get_url(current_information, current_window) if current_window in [
                 "Firefox", "Chrome"] else None
             print(current_information)
+            print(tab)
         new_window, new_information = get_active_window_title()
 
 
 def get_url(curr_inf, curr_win):
     if curr_win in ["Chrome"]:
-        tab = get_chrome_url()
+        tab = get_chrome_url(curr_inf)
     elif curr_win in ["Firefox"]:
-        tab = get_Firefox_url()
-        print("Mozilla")
+        tab = get_firefox_url(curr_inf)
     else:
         tab = None
+    return tab
 
 
-def get_chrome_url_x():
+def get_chrome_url(detail_full):
     '''
     instead of url the name of the website and the title of the page is returned seperated by '/'
     '''
-    detail_full = get_active_window_raw()
     detail_list = detail_full.split(' - ')
     detail_list.pop()
     detail_list = detail_list[::-1]
@@ -66,15 +66,14 @@ def get_chrome_url_x():
     return _active_window_name
 
 
-def get_firefox_url():
+def get_firefox_url(detail_full):
     '''
     instead of url the name of the website and the title of the page is returned seperated by '/'
     '''
-    detail_full = get_active_window_raw()
     detail_list = detail_full.split(' - ')
     detail_list.pop()
     detail_list = detail_list[::-1]
-    _active_window_name = 'Firefox -> ' + " / ".join(detail_list)
+    _active_window_name = " / ".join(detail_list)
     return _active_window_name
 
 
@@ -82,8 +81,11 @@ def get_active_window_title():
     full_detail = get_active_window_raw()
     detail_list = None if full_detail is None else full_detail.decode(
         "utf-8").split(" ")
-    new_window_name = detail_list[-1]
-    return new_window_name, full_detail
+    if detail_list is None:
+        return None, None
+    else:
+        new_window_name = detail_list[-1]
+        return new_window_name, full_detail.decode("utf-8")
 
 
 run()
