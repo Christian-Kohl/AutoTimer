@@ -27,32 +27,31 @@ def get_active_window_raw():
     match = re.match(b"WM_NAME\(\w+\) = (?P<name>.+)$", stdout)
     if match != None:
         ret = match.group("name").strip(b'"')
-        # print(type(ret))
-        '''
-        ret is str for python2
-        ret is bytes for python3 (- gives error while calling in other file)
-        be careful
-        '''
         return ret
     return None
 
 
-'''
-this file alone can be run without importing other files
-uncomment the below lines for linux - works - but activities won't be dumped in json file
-(may be it works for other OS also, not sure)
-'''
-
-
 def run():
+    new_information = None
     new_window = None
-    current_window = get_active_window_title()
+    current_window, current_information = get_active_window_title()
     while(True):
-        if new_window != current_window:
-            print(new_window)
-            print(type(new_window))
-            current_window = new_window
-        new_window = get_active_window_title()
+        if new_information != current_information:
+            current_window, current_information = new_window, new_information
+            tab = get_url(current_information, current_window) if current_window in [
+                "Firefox", "Chrome"] else None
+            print(current_information)
+        new_window, new_information = get_active_window_title()
+
+
+def get_url(curr_inf, curr_win):
+    if curr_win in ["Chrome"]:
+        tab = get_chrome_url()
+    elif curr_win in ["Firefox"]:
+        tab = get_Firefox_url()
+        print("Mozilla")
+    else:
+        tab = None
 
 
 def get_chrome_url_x():
@@ -67,12 +66,24 @@ def get_chrome_url_x():
     return _active_window_name
 
 
+def get_firefox_url():
+    '''
+    instead of url the name of the website and the title of the page is returned seperated by '/'
+    '''
+    detail_full = get_active_window_raw()
+    detail_list = detail_full.split(' - ')
+    detail_list.pop()
+    detail_list = detail_list[::-1]
+    _active_window_name = 'Firefox -> ' + " / ".join(detail_list)
+    return _active_window_name
+
+
 def get_active_window_title():
     full_detail = get_active_window_raw()
     detail_list = None if full_detail is None else full_detail.decode(
         "utf-8").split(" ")
     new_window_name = detail_list[-1]
-    return new_window_name
+    return new_window_name, full_detail
 
 
 run()
