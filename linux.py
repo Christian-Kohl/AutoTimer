@@ -92,6 +92,14 @@ def get_active_window_title():
         return new_window_name, full_detail.decode("utf-8")
 
 
+def read_file():
+    return
+
+
+def write_file():
+    return
+
+
 def run():
     if not (path.exists("track_log") and path.isdir("track_log")):
         os.mkdir("track_log")
