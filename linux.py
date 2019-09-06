@@ -2,9 +2,11 @@
 This file gives the linux support for this repo
 '''
 import sys
+from os import path
 import os
 import subprocess
 import re
+import datetime
 
 
 def get_active_window_raw():
@@ -31,13 +33,15 @@ def get_active_window_raw():
     return None
 
 
-def run():
+def track():
     new_information = None
     new_window = None
+    last_change = datetime.datetime.now()
     current_window, current_information = get_active_window_title()
     while(True):
         if new_information != current_information:
             current_window, current_information = new_window, new_information
+            this_change
             tab = get_url(current_information, current_window) if current_window in [
                 "Firefox", "Chrome"] else None
             print(current_information)
@@ -86,6 +90,22 @@ def get_active_window_title():
     else:
         new_window_name = detail_list[-1]
         return new_window_name, full_detail.decode("utf-8")
+
+
+def run():
+    if not (path.exists("track_log") and path.isdir("track_log")):
+        os.mkdir("track_log")
+    current_date = datetime.date.today()
+    if not path.exists("track_log/" + current_date.strftime("%d-%m-%Y") + ".json"):
+        print("this")
+        file = open("track_log/" +
+                    current_date.strftime("%d-%m-%Y") + ".json", "w+")
+        activity_list = []
+    else:
+        file = open("track_log/" +
+                    current_date.strftime("%d-%m-%Y") + ".json", "w+")
+        activity_list = read_file(file)
+    track(activity_list)
 
 
 run()
