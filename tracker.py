@@ -38,7 +38,7 @@ def get_active_window_raw():
 
 
 '''
-This is the method to actually track the windos, and subsequently output information
+This is the method to actually track the windows, and subsequently output information
 '''
 
 
@@ -119,45 +119,3 @@ def get_active_window_title():
     else:
         new_window_name = detail_list[-1]
         return new_window_name, full_detail.decode("utf-8")
-
-
-'''
-Reads the .json file, so that previous infotmation from this day can be stored
-'''
-
-
-def read_file():
-    return
-
-
-'''
-Writes to the current day's file
-'''
-
-
-def write_file():
-    return
-
-
-'''
-Main method, for reading and writing to files as well
-'''
-
-
-def run():
-    if not (path.exists("track_log") and path.isdir("track_log")):
-        os.mkdir("track_log")
-    current_date = datetime.date.today()
-    if not path.exists("track_log/" + current_date.strftime("%d-%m-%Y") + ".json"):
-        print("this")
-        file = open("track_log/" +
-                    current_date.strftime("%d-%m-%Y") + ".json", "w+")
-        activity_list = []
-    else:
-        file = open("track_log/" +
-                    current_date.strftime("%d-%m-%Y") + ".json", "w+")
-        activity_list = read_file(file)
-    track(activity_list)
-
-
-run()
