@@ -1,5 +1,5 @@
 '''
-This file gives the linux support for this repo
+This file gives the linux support for this repo, next section is for imports
 '''
 import sys
 from os import path
@@ -7,6 +7,10 @@ import os
 import subprocess
 import re
 import datetime
+
+'''
+Gives the raw information of the current window
+'''
 
 
 def get_active_window_raw():
@@ -33,6 +37,11 @@ def get_active_window_raw():
     return None
 
 
+'''
+This is the method to actually track the windos, and subsequently output information
+'''
+
+
 def track():
     new_information = None
     new_window = None
@@ -49,6 +58,11 @@ def track():
         new_window, new_information = get_active_window_title()
 
 
+'''
+This method identifies the current web browser, and subsequently gets the website's name
+'''
+
+
 def get_url(curr_inf, curr_win):
     if curr_win in ["Chrome"]:
         tab = get_chrome_url(curr_inf)
@@ -57,6 +71,11 @@ def get_url(curr_inf, curr_win):
     else:
         tab = None
     return tab
+
+
+'''
+Gets the information of the url in chrome, can be extended to browser that have a similar information output
+'''
 
 
 def get_chrome_url(detail_full):
@@ -70,6 +89,11 @@ def get_chrome_url(detail_full):
     return _active_window_name
 
 
+'''
+Gets the information of the url in Firefox, can be extended to browser that have a similar information output
+'''
+
+
 def get_firefox_url(detail_full):
     '''
     instead of url the name of the website and the title of the page is returned seperated by '/'
@@ -79,6 +103,11 @@ def get_firefox_url(detail_full):
     detail_list = detail_list[::-1]
     _active_window_name = " / ".join(detail_list)
     return _active_window_name
+
+
+'''
+Gets the title of the currently active window, also outputs the raw new_information
+'''
 
 
 def get_active_window_title():
@@ -92,12 +121,27 @@ def get_active_window_title():
         return new_window_name, full_detail.decode("utf-8")
 
 
+'''
+Reads the .json file, so that previous infotmation from this day can be stored
+'''
+
+
 def read_file():
     return
 
 
+'''
+Writes to the current day's file
+'''
+
+
 def write_file():
     return
+
+
+'''
+Main method, for reading and writing to files as well
+'''
 
 
 def run():
